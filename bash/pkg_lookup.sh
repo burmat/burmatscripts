@@ -3,6 +3,8 @@
 # get list of packages (rpm or dpkg) and dump them to a grep-able
 # format for searchsploit. og credit to chryzsh, modified by burmat
 #
+# https://burmat.gitbook.io/security/one-liners-and-dirty-scripts#finding-vulnerable-applications-linux
+#
 #################
 # Instructions: #
 #################
