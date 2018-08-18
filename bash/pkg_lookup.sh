@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # get list of packages (rpm or dpkg) and dump them to a grep-able
-# format for searchsploit. og credit to chryzsh, modified by burmat)
+# format for searchsploit. og credit to chryzsh, modified by burmat
 #
 #################
 # Instructions: #
@@ -12,8 +12,8 @@
 # > FILE="packages.txt"; FILEPATH="/tmp/$FILE"; /usr/bin/rpm -q -f /usr/bin/rpm >/dev/null 2>&1; if [ $? -eq 0 ]; then rpm -qa --qf "%{NAME} %{VERSION}\n" | sort -u > $FILEPATH; echo "kernel $(uname -r)" >> $FILEPATH; else dpkg -l | grep ii | awk '{print $2 " " substr($3,1)}' > $FILEPATH; echo "kernel $(uname -r)" >> $FILEPATH; fi; echo ""; echo "[>] Done. Transfer $FILEPATH to your computer and run: "; echo ""; echo "./packages_compare.sh /path/to/$FILE" echo "";
 #
 # 2) Copy the file it generates back to your machine (or any machine with searchsploit)
-# 3) Run this script, passing in the directory of the file:
-# >	 hello@burmat~$ ./pkg_loookup.sh ~/packages.txt
+# 3) Run this script, passing in the filepath:
+# >  hello@burmat~$ ./pkg_loookup.sh ~/packages.txt
 #
 # 4) Wait for something juicy
 ###################################
