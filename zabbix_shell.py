@@ -16,7 +16,7 @@ url += '/api_jsonrpc.php'               # endpoint
 
 username = 'superadmin'     # username
 password = 'password'       # password
-hostid = '10101'            # must have write permissions to host
+hostid = '10105'            # must have write permissions to host
 scriptname = '1337evil'     # w/e you wanna name it
 
 headers = { 'content-type': 'application/json' }
