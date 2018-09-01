@@ -1,6 +1,6 @@
 ## Scripts and One-Liners
 
-This is just a collection of scripts and code that I have had to use more than once over the last few years. Some of it might be helpful for various reasons, and some of it might be useless. I will do my best to give credit to all og sources if that is the case, and if I have forgotten, I apologize ahead of time.
+This a place to drop scripts and code I have collected in the last few years. Some of it might be helpful for various reasons, and some of it might be useless. If I have not given credit where it is due, please PM me and accept my apologies in advance.
 
 [https://burmat.gitbook.io/security/] has writings that go hand-in-hand with this repo.
 
