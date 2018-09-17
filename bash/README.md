@@ -4,6 +4,7 @@
 | Filename        | Description                                                                          |
 |-----------------|--------------------------------------------------------------------------------------|
 | [cover_tracks.sh](https://github.com/burmat/burmatscripts/blob/master/bash/cover_tracks.sh) | Clear out common/various files that might lead to discovery |
+| [delete_by_extension.sh](https://github.com/burmat/burmatscripts/blob/master/bash/delete_by_extension.sh) | Given a directory, remove all files with whitelist on file extensions |
 | [iptables_flush.sh](https://github.com/burmat/burmatscripts/blob/master/bash/iptables_flush.sh) | Flush all rules out of iptables (Allow all traffic) |
 | [procmon.sh](https://github.com/burmat/burmatscripts/blob/master/bash/procmon.sh) | From ippsec to find blind cron jobs/processes using PS |
 | [purge_logs.sh](https://github.com/burmat/burmatscripts/blob/master/bash/purge_logs.sh) | Empty out common log files |
