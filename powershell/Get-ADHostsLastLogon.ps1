@@ -1,4 +1,4 @@
- Import-Module ActiveDirectory
+Import-Module ActiveDirectory
 
 function Get-ADHostsLastLogon() {
 
