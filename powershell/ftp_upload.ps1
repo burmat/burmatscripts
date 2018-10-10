@@ -33,6 +33,11 @@ $msg_from = "ftpupload@burmat.co"
 $msg_sub = "FTP Files Uploaded"
 $msg_to = "burmat@burmat.co,nathan.burchfield@burmat.co"
 $msg_body = "The following files were uploaded to $($ftp_host):`n`n"
+
+## for errors:
+$msg_sub_err = "JMART - ERROR - XML Order Upload Failed"
+$msg_body_err = "An FTP connection failure occurred and the script exited. No files were archived. Exception:"
+
 #$smtp_user = "MyUserName";
 #$smtp_pass = "MyPassword";
 #$attach_path = "C:\Data\attachment.txt"; # optional
@@ -65,24 +70,44 @@ function Send-ToEmail([string]$destination, [string]$from, [string]$subject, [st
 # pass it a src and dest, and it will upload based on the variables above
 function Ftp-Upload([string]$src, [string]$dest) {
     
-    # create the FtpWebRequest and configure it
-    $ftp = [System.Net.FtpWebRequest]::Create("ftp://$ftp_host/$dest")
-    $ftp = [System.Net.FtpWebRequest]$ftp
-    $ftp.Method = [System.Net.WebRequestMethods+Ftp]::UploadFile
-    $ftp.Credentials = new-object System.Net.NetworkCredential($ftp_uname, $ftp_pass)
-    $ftp.UseBinary = $true
-    $ftp.UsePassive = $true
-    
-    # read in the file to a byte array
-    $content = [System.IO.File]::ReadAllBytes($src)
-    $ftp.ContentLength = $content.Length
+    try {
 
-    # write the bytes to the request stream
-    $rs = $ftp.GetRequestStream()
-    $rs.Write($content, 0, $content.Length)
+        # create the FtpWebRequest and configure it
+        $ftp = [System.Net.FtpWebRequest]::Create("ftp://$ftp_host/$dest")
+        $ftp = [System.Net.FtpWebRequest]$ftp
+        $ftp.Method = [System.Net.WebRequestMethods+Ftp]::UploadFile
+        $ftp.Credentials = new-object System.Net.NetworkCredential($ftp_uname, $ftp_pass)
+        $ftp.UseBinary = $true
+        $ftp.UsePassive = $true
+        
+        # read in the file to a byte array
+        $content = [System.IO.File]::ReadAllBytes($src)
+        $ftp.ContentLength = $content.Length
 
-    # cleanup
-    if ($rs -ne $null) { $rs.Close(); $rs.Dispose(); }
+        # write the bytes to the request stream
+        # TODO: Handle overwrite
+        $rs = $ftp.GetRequestStream()
+        $rs.Write($content, 0, $content.Length)
+
+        # assume we were successful by this point, append
+        $global:uploaded_files += $src
+
+        # cleanup
+        if ($rs -ne $null) { $rs.Close(); $rs.Dispose(); }
+   
+    } catch {
+
+        ## if any failures occur, exit out and email
+        $err = $_.Exception.GetType().FullName, $_.Exception.Message
+
+        Write-Host "[!] FTP Transfer failed - Exiting Script. Exception:"
+        Write-Host "----------------------------------------------------:"
+        Write-Host $err
+        
+        Send-ToEmail  -destination $msg_to -from $msg_from -subject $msg_sub_err -body "$($msg_body_err)`n`n$($err)";
+        
+        Exit
+    } 
 }
 
 # based on the variables above, read in all files and upload them
@@ -94,8 +119,6 @@ Get-ChildItem $source_directory -Filter $extension | Foreach-Object {
     # run the upload
     Ftp-Upload -src $f_source -dest $f_destination
 
-    # append to the list for archive:
-    $uploaded_files += $f_source
 }
 
 # if files were uploaded...
