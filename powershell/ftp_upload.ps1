@@ -35,7 +35,7 @@ $msg_to = "burmat@burmat.co,nathan.burchfield@burmat.co"
 $msg_body = "The following files were uploaded to $($ftp_host):`n`n"
 
 ## for errors:
-$msg_sub_err = "JMART - ERROR - XML Order Upload Failed"
+$msg_sub_err = "ERROR - File Upload Failed"
 $msg_body_err = "An FTP connection failure occurred and the script exited. No files were archived. Exception:"
 
 #$smtp_user = "MyUserName";
