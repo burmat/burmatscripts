@@ -31,7 +31,7 @@
 # PS > ./TFSCommit.ps1 -ProjectName "VTP" -Merge
 #############
 
-param([string]$ProjectName = "VTT", [switch]$Initialize = $false, [switch]$Merge = $false)
+param([string]$ProjectName = "PROJECT1", [switch]$Initialize = $false, [switch]$Merge = $false)
 
 Add-PSSnapin Microsoft.TeamFoundation.PowerShell
 
