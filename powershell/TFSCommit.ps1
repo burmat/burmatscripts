@@ -1,35 +1,40 @@
-#############
-# TFSCommit.ps1
+###############################################################################
+# TFSCommit.ps1 
 # Author: burmat
 #
-##
+###############################################################################
+#
 # This script is for a special case where we have a large code repository, but 
 # no way to properly check out and make modifications. This is because the code
 # needs to be run on a particular server and compiler service to 
 # test. This makes it impossible to use revision control as designed and still
 # maintain a team of programmers.
-##
+#
 # This script was created to pull down those working directories push the files 
 #into TFS anyway, so we can at least track changes to the project folders. This 
 # script is heavy in that it will copy everything and try to commit everything 
 # (only changes are ACTUALLY committed). Futher optimization can by done by 
 # only copying modified files and attempting to merge modified files only (TODO)
 #
+###############################################################################
+#
 # PARAMETER: -ProjectName "<PROJECT>"
-#     The friendly name of your project, mapped to a remote directory in Merge-ProductCode()
+#   The friendly name of your project, mapped to a remote directory in Merge-ProductCode()
 #
 # PARAMETER: -Initialize
-#     This switch will set up (after removing) the workspace on your computer
+#   This switch will set up (after removing) the workspace on your computer
 #
 # PARAMETER: -Merge
-#     This switch will auto-merge the project folder code to workspace w/o confirmation
+#   This switch will auto-merge the project folder code to workspace w/o confirmation
 #
-# EXAMPLE - Initialize project folder and workspace:
-# PS > ./TFSCommit.ps1 -Initialize -ProjectName "VTP"
+# EXAMPLE:  PS > ./TFSCommit.ps1 -Initialize -ProjectName "PROJECT1"
+#   Initialize project folder and workspace
+#     
 #
-# EXAMPLE - Merge without a confirmation (good for scheduled task):
-# PS > ./TFSCommit.ps1 -ProjectName "VTP" -Merge
-#############
+# EXAMPLE:  PS > ./TFSCommit.ps1 -ProjectName "PROJECT1" -Merge
+#   Merge without a confirmation (good for scheduled task):
+#
+###############################################################################
 
 param([string]$ProjectName = "PROJECT1", [switch]$Initialize = $false, [switch]$Merge = $false)
 
