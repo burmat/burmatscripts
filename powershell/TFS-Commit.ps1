@@ -6,22 +6,19 @@
 #
 # This script is for a special case where we have a large code repository, but 
 # no way to properly check out and make modifications. This is because the code
-# needs to be run on a particular server and compiler service to 
-# test. This makes it impossible to use revision control as designed and still
-# maintain a team of programmers.
+# needs to be run on a particular server and compiler service to test. This 
+# makes it impossible to use revision control as designed and still maintain a 
+# team of programmers.
 #
-# This script was created to pull down those working directories push the files 
-# into TFS anyway, so we can at least track changes to the project folders. This 
-# script is heavy in that it will copy everything and try to commit everything 
-# (only changes are ACTUALLY committed). Futher optimization can by done by 
-# only copying modified files and attempting to merge modified files only (TODO)
+# This script was created to pull down those working directories and push the 
+# files into TFS so we can track the revision history
 #
 ###############################################################################
 #
 # TO USE ON NEW PROJECT - FIRST RUN/COMMIT:
 #   1) Create a project in TFS
 #   2) Add the Project name to the `Merge-ProjectCode()` w/ filesystem location
-#   2) Run with the -FullCommit flag to copy all files and commit all files
+#   2) Run with the -FullCommit switch to copy all files and commit all files
 #
 ###############################################################################
 #
@@ -29,13 +26,13 @@
 #       The name of your TFS project, mapped to directory in Merge-ProductCode()
 #
 #   PARAMETER: -Merge
-#       Auto merge project developent code without confirmation
+#       Merge development code into the workspace directory without confirmation
 #
 #   PARAMETER: -Clone
-#       Auto clone TFS project to local folder without confirmation
+#       Clone the TFS Project to the workspace directory without confirmation
 #
 #   PARAMETER: -FullCommit
-#       Push all code (-Add) to staging and attempt to commit (First run)
+#       Push all code (-Add) to staging and attempt to commit everything
 #
 #   PARAMETER: -Alteration
 #       Simulate an alteration by adding a new file to the workspace
