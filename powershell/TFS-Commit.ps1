@@ -91,6 +91,7 @@ function Initialize-Workspace() {
         Print-Debug "Deleting local folder: $LOCALFOLDER"
         Remove-Item -Path "$LOCALFOLDER\*" -Recurse -Force | Out-Null
         Remove-Item -Path "$LOCALFOLDER" -Recurse -Force | Out-Null
+        # yes i know it's twice - it's on purpose
     }
 
     ## create the directory to house the workspace
@@ -98,10 +99,10 @@ function Initialize-Workspace() {
 
     Try {
         ## try to find the workspace
-        $Workspace = $VcServer.GetWorkspace($WORKSPACENAME, $env:USERNAME)
-        if ($Workspace -ne $null) {
+        $workspace = $vcServer.GetWorkspace($WORKSPACENAME, $env:USERNAME)
+        if ($workspace -ne $null) {
             Print-Debug "Workspace found, deleting it now.."
-            $VcServer.DeleteWorkspace($WORKSPACENAME, $env:USERNAME) | Out-Null
+            $vcServer.DeleteWorkspace($WORKSPACENAME, $env:USERNAME) | Out-Null
         }
     } Catch {
         Print-Debug "No workspace found."
@@ -109,17 +110,17 @@ function Initialize-Workspace() {
 
     ## create the workspace, link to local directory
     Print-Debug "Initializing workspace..."
-    $Workspace = $VcServer.CreateWorkspace($WORKSPACENAME, $env:USERNAME)
-    $Workspace.Map($SERVERPATH, $LOCALFOLDER)
+    $workspace = $vcServer.CreateWorkspace($WORKSPACENAME, $env:USERNAME)
+    $workspace.Map($SERVERPATH, $LOCALFOLDER)
 
     ## if desired, clone the TFS Project code down to workspace:
     if ($Clone) {
         Print-Debug "Cloning TFS project to $LOCALFOLDER (May take a while).."
-        $Workspace.Get([Microsoft.TeamFoundation.VersionControl.Client.VersionSpec]::Latest, 
+        $workspace.Get([Microsoft.TeamFoundation.VersionControl.Client.VersionSpec]::Latest, 
             [Microsoft.TeamFoundation.VersionControl.Client.GetOptions]::Overwrite)
     } else {
-        $Confirm = Read-Host "Would you like to clone a local copy of $PROJECT now? [y/N]"
-        if ($Confirm -Match "[yY]") {
+        $confirm = Read-Host "Would you like to clone a local copy of $PROJECT now? [y/N]"
+        if ($confirm -Match "[yY]") {
             Print-Debug "Cloning TFS project to $LOCALFOLDER (May take a while).."
             $workspace.Get([Microsoft.TeamFoundation.VersionControl.Client.VersionSpec]::Latest, 
             [Microsoft.TeamFoundation.VersionControl.Client.GetOptions]::Overwrite)
@@ -134,8 +135,8 @@ function Initialize-Workspace() {
 ## up the script dramatically and causes less confusion on -Add / -Edit
 function Commit-workspace() {
     Try {
-        $Workspace = $VcServer.GetWorkspace($WORKSPACENAME, $env:USERNAME)
-        if ($Workspace -eq $null) {
+        $workspace = $vcServer.GetWorkspace($WORKSPACENAME, $env:USERNAME)
+        if ($workspace -eq $null) {
             Exit-WithError "Workspace not initialized properly. Please re-initialize."
         }
     } Catch {
@@ -170,12 +171,12 @@ function Commit-workspace() {
         }
     }
 
-    $PendingChanges = $Workspace.GetPendingChanges()
-    if ($PendingChanges) {
+    $pendingChanges = $workspace.GetPendingChanges()
+    if ($pendingChanges) {
 
         ## for logging purposes:
         Print-Debug "`n`nStaged files to commit:"
-        $PendingChanges | fl FileName,ChangeType,ServerItem,CreationDate
+        $pendingChanges | fl FileName,ChangeType,ServerItem,CreationDate
 
         ## check in the code
         $Author = "POWERSHELL"
@@ -183,9 +184,9 @@ function Commit-workspace() {
         if ($FullCommit) {
             $Comment = "Project Full Commit"
         }
-        $PolicyOverrideInfo = New-Object Microsoft.TeamFoundation.VersionControl.Client.PolicyOverrideInfo("Auto checkin", $null)
-        $CheckinOptions = [Microsoft.TeamFoundation.VersionControl.Client.CheckinOptions]::SuppressEvent
-        $Workspace.CheckIn($PendingChanges, $Author, $Comment, $null, $null, $PolicyOverrideInfo, $CheckinOptions)
+        $policyOverrideInfo = New-Object Microsoft.TeamFoundation.VersionControl.Client.PolicyOverrideInfo("Auto checkin", $null)
+        $checkinOptions = [Microsoft.TeamFoundation.VersionControl.Client.CheckinOptions]::SuppressEvent
+        $workspace.CheckIn($pendingChanges, $Author, $Comment, $null, $null, $policyOverrideInfo, $checkinOptions)
         
         Print-Debug "`n`n---> Check-in Completed"
     
@@ -208,14 +209,14 @@ function Alter-Workspace() { Get-Date | Out-File $LOCALFILE }
 
 
 ## instatiate the tfs server
-$TfsServer = Get-TfsServer -Name $URL
+$tfsServer = Get-TfsServer -Name $URL
 
 ## instatiate the version control server
-$VcServer = $TfsServer.GetService([Microsoft.TeamFoundation.VersionControl.Client.VersionControlServer])
+$vcServer = $tfsServer.GetService([Microsoft.TeamFoundation.VersionControl.Client.VersionControlServer])
 
 ## instatiate the project
 Try {
-    $VcProject = $VcServer.GetTeamProject($PROJECT)
+    $vcProject = $vcServer.GetTeamProject($PROJECT)
 } Catch {
     Exit-WithError "Unable to find project with that name on TFS Server."
 }
@@ -231,8 +232,8 @@ if ($Alteration) {
 if ($Merge) {
     Merge-ProjectCode
 } else {
-    $Confirm = Read-Host "Would you like to merge live $PROJECT code into this workspace? [y/N]"
-    if ($Confirm -Match "[yY]") {
+    $confirm = Read-Host "Would you like to merge live $PROJECT code into this workspace? [y/N]"
+    if ($confirm -Match "[yY]") {
         Merge-ProjectCode
     }
 }
