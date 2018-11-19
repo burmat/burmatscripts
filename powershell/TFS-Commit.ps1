@@ -34,9 +34,6 @@
 #   PARAMETER: -FullCommit
 #       Push all code (-Add) to staging and attempt to commit everything
 #
-#   PARAMETER: -Alteration
-#       Simulate an alteration by adding a new file to the workspace
-#
 #   EXAMPLE - Push a new project into TFS (All files and folders)
 #       PS > ./TFS-Commit.ps1 -ProjectName "PROJECT1" -FullCommit
 #
@@ -49,20 +46,18 @@ param(
     [string]$ProjectName = "INVALID", 
     [switch]$Merge = $false, 
     [switch]$Clone = $false, 
-    [switch]$FullCommit = $false,
-    [switch]$Alteration = $false
+    [switch]$FullCommit = $false
 )
 
 Add-PSSnapin Microsoft.TeamFoundation.PowerShell
 
-$PROJECT = $ProjectName
-$URL = "http://coderepo.burmat.co:8080/tfs/Projects"
-$SERVERPATH = "$/$PROJECT"
-$LOCALFOLDER = "C:\TFS-REPO\$PROJECT\"
-$WORKSPACENAME = "TFS-$PROJECT"
-
-## used to simulate a change to the workspace (call `Alter-Workspace()`)
-$LOCALFILE = "$LOCALFOLDER\burmatwashere.txt"
+## global variables. subject to re-initialization if $ProjectName = "ALL"
+$global:PROJECTS_AVAIL = @("PROJECT1", "PROJECT2")
+$global:PROJECT = $ProjectName
+$global:SERVERPATH = "$/$ProjectName"
+$global:LOCALFOLDER = "C:\TFS-REPO\$PROJECT\"
+$global:WORKSPACENAME = "TFS-$ProjectName"
+$global:URL = "http://coderepo.burmat.co:8080/tfs/Projects"
 
 ## Maps TFS Project to development code.  Copies everything to 
 ## the workspaces local directory.
@@ -133,7 +128,7 @@ function Initialize-Workspace() {
 ## are added to staging with -Add. Otherwise, the files are only added to 
 ## staging if they have been modified in the last 48 hours. This speeds
 ## up the script dramatically and causes less confusion on -Add / -Edit
-function Commit-workspace() {
+function Commit-Workspace() {
     Try {
         $workspace = $vcServer.GetWorkspace($WORKSPACENAME, $env:USERNAME)
         if ($workspace -eq $null) {
@@ -204,9 +199,35 @@ function Exit-WithError([string]$msg) { Write-Host("[#] Exiting due to error: $m
 # Log a debug message
 function Print-Debug([string]$msg) { Write-Host "[#] $msg" }
 
-# Simulate a change to the workspace
-function Alter-Workspace() { Get-Date | Out-File $LOCALFILE }
+function Main() {
 
+    ## instatiate the project
+    Try {
+        $vcProject = $vcServer.GetTeamProject($PROJECT)
+    } Catch {
+        Exit-WithError "Unable to find project with that name on TFS Server."
+    }
+
+    ## remove and re-create directory/workspace
+    Initialize-Workspace
+
+    if ($Alteration) {
+        ## simulate a change to the workspace
+        Alter-Workspace 
+    }
+
+    if ($Merge) {
+        Merge-ProjectCode
+    } else {
+        $confirm = Read-Host "Would you like to merge live $PROJECT code into this workspace? [y/N]"
+        if ($confirm -Match "[yY]") {
+            Merge-ProjectCode
+        }
+    }
+
+    ## attempt to commit any changes to the workspace
+    Commit-Workspace
+}
 
 ## instatiate the tfs server
 $tfsServer = Get-TfsServer -Name $URL
@@ -214,32 +235,23 @@ $tfsServer = Get-TfsServer -Name $URL
 ## instatiate the version control server
 $vcServer = $tfsServer.GetService([Microsoft.TeamFoundation.VersionControl.Client.VersionControlServer])
 
-## instatiate the project
-Try {
-    $vcProject = $vcServer.GetTeamProject($PROJECT)
-} Catch {
-    Exit-WithError "Unable to find project with that name on TFS Server."
-}
+## see if the user wants to loop all of the projects or run a single one:
+if ($ProjectName -eq "ALL") {
+    foreach ($proj in $global:PROJECTS_AVAIL) {
+        # reset some vars used around the script:
+        $global:PROJECT = $proj
+        $global:SERVERPATH = "$/$proj"
+        $global:LOCALFOLDER = "C:\Users\nburchfield\Desktop\$proj\"
+        $global:WORKSPACENAME = "TFS-$proj"
 
-## remove and re-create directory/workspace
-Initialize-Workspace
+        Main # will loop the projects
 
-if ($Alteration) {
-    ## simulate a change to the workspace
-    Alter-Workspace 
-}
-
-if ($Merge) {
-    Merge-ProjectCode
-} else {
-    $confirm = Read-Host "Would you like to merge live $PROJECT code into this workspace? [y/N]"
-    if ($confirm -Match "[yY]") {
-        Merge-ProjectCode
     }
+} else {
+
+    Main # single project run
 }
 
-## attempt to commit any changes to the workspace
-Commit-Workspace
 
 Write-Host "`n------"
 Write-Host "Done."
