@@ -32,16 +32,16 @@ import glob, os, sys, argparse, datetime, fnmatch, smtplib, pysftp as sftp
 from shutil import copyfile
 from email.mime.text import MIMEText
 
-EDI_SERVER="177.66.55.123"				## EDI Server
-EDI_USERNAME="BURMAT" 					## SFTP Username
-EDI_PASSWORD="BURMAT123" 				## SFTP Password
-EDI_PORT=22 							## SFTP Port
+EDI_SERVER="177.66.55.123"	## EDI Server
+EDI_USERNAME="BURMAT" 		## SFTP Username
+EDI_PASSWORD="BURMAT123" 	## SFTP Password
+EDI_PORT=22 				## SFTP Port
 
 
-LOG_FILE="~/scripts/output/" 			## Where to log the output (updated in main)
-TOTAL_LOG_SIZE=1500						## amount of lines to keep in log files (history)
-PROCESSED_FILES=0 						## The number of files processed
-OUTPUT=[] 								## String array to hold our output (line by line)
+LOG_FILE="~/scripts/output/" 	## Where to log the output (updated in main)
+TOTAL_LOG_SIZE=1500 			## amount of lines to keep in log files (history)
+PROCESSED_FILES=0 				## The number of files processed
+OUTPUT=[]  						## String array to hold our output (line by line)
 
 '''
 NOTE: you can use: `EMAIL_TO.append("another.email@burmat.co")` 
