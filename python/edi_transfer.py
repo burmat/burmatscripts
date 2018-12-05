@@ -1,30 +1,30 @@
 #!/usr/bin/python3.6
 
 #####################################################################
-# Created By: burmat												#
-# Created On: 12/2018												#
-# 																	#
-# Purpose: One script to get EDI files from point A -> B. Fire 		# 
-# 	from all the crontabs. Let it rain the crons.					#
-#																	#
-# Parameters:														#
-# 	--method = The transfer method - (upload or download)			#
-# 	--files = The types of files you want to transmit 				#
-#																	#
-# Usage Example - Download 850 files from EDI server:				#
-# 	./edi_transfer.py --method download --files 850					#
-#																	#
-# The main method function will have the logic for what fires		#
-# where. Update that when you want to add a new file type or new	#
-# features.															#
-#																	#
-# At the end, whatever is in the list "OBJECT" will get logged		#
-# to file. If files are transmitted, and email is set. It will		#
-# Also trim up the length of the file. 								#
-#																	#
-# If you want to add recipients to get emails for particular 		#
-# file transmissions, do so in the main function. search for 		#
-# "ap@burmat.co" to see an example. 								#
+# Created By: burmat
+# Created On: 12/2018
+# 
+# Purpose: One script to get EDI files from point A -> B. Works
+# 	well from cron. Let it rain all of the crons.
+#
+# Parameters:
+# 	--method = The transfer method - (upload or download)
+# 	--files = The types of files you want to transmit 
+#
+# Usage Example - Download 850 files from EDI server:
+# 	./edi_transfer.py --method download --files 850
+#
+# The main method function will have the logic for what fires
+# where. Update that when you want to add a new file type or new
+# features.	
+#
+# At the end, whatever is in the list "OBJECT" will get logged
+# to file. If files are transmitted, and email is set. It will
+# Also trim up the length of the file.
+#
+# If you want to add recipients to get emails for particular
+# file transmissions, do so in the main function. search for
+# "ap@burmat.co" to see an example.
 #####################################################################
 
 ## required:
@@ -32,7 +32,7 @@ import glob, os, sys, argparse, datetime, fnmatch, smtplib, pysftp as sftp
 from shutil import copyfile
 from email.mime.text import MIMEText
 
-EDI_SERVER="10.11.1.123"				## EDI Server
+EDI_SERVER="177.66.55.123"				## EDI Server
 EDI_USERNAME="BURMAT" 					## SFTP Username
 EDI_PASSWORD="BURMAT123" 				## SFTP Password
 EDI_PORT=22 							## SFTP Port
