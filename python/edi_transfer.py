@@ -14,8 +14,8 @@
 # Usage Example - Download 850 files from EDI server:
 # 	./edi_transfer.py --method download --files 850
 #
-# The main method function will have the logic for what fires
-# where. Update that when you want to add a new file type or new
+# The main function will have the logic for what fires where.
+# Update that when you want to add a new file type or new
 # features.	
 #
 # At the end, whatever is in the list "OBJECT" will get logged
