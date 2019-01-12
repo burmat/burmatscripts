@@ -3,6 +3,7 @@
 
 | Filename        | Description                                                                          |
 |-----------------|--------------------------------------------------------------------------------------|
+| [cleanup.sh](https://github.com/burmat/burmatscripts/blob/master/bash/cleanup.sh) | A simple utility script to remove files in a directory by file ext (cron) |
 | [cover_tracks.sh](https://github.com/burmat/burmatscripts/blob/master/bash/cover_tracks.sh) | Clear out common/various files that might lead to discovery |
 | [delete_by_extension.sh](https://github.com/burmat/burmatscripts/blob/master/bash/delete_by_extension.sh) | Given a directory, remove all files with whitelist on file extensions |
 | [iptables_flush.sh](https://github.com/burmat/burmatscripts/blob/master/bash/iptables_flush.sh) | Flush all rules out of iptables (Allow all traffic) |
