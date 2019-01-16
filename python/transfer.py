@@ -38,17 +38,17 @@ if __name__ == '__main__':
 	trans.SOURCE_DIR  = "/data/outbound/"
 	trans.EXT_MASK    = "*.csv" # (file mask used for finding files)
 	trans.DEST_DIR    = "incoming/"
-	trans.ARCHIVE 	  = True
+	trans.ARCHIVE     = True
 	trans.ARCHIVE_DIR = "/data/outbound/sent/"
 	
 	## file to log to:
 	log.FILEPATH = "/var/log/sftp_upload.log"
-	log.SIZE 	 = 3500 # (lines to keep)
+	log.SIZE     = 3500 # (lines to keep)
 
 	## email options (email_output must be True):
-	email_from          = "cron@burmat.co"
-	email_to            = ["nathan@burmat.co"]
-	email_subject 	    = "Template Script/Transfer Complete!"
+	email_from    = "cron@burmat.co"
+	email_to      = ["nathan@burmat.co"]
+	email_subject = "Template Script/Transfer Complete!"
 
 	'''
 		Now to get to work:
