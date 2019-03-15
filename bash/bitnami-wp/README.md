@@ -1,10 +1,8 @@
 ## BITNAMI (WORDPRESS) Util Scripts
 
-I like to have one primary server up and running WP with a secondary on standby. I leveage the scripts in this folder to backup the primary server, download the backups locally for long-term storage, and upload them to a secondary server. This makes it trivial to recreate our website for a specific backup date.
+I like to have one primary server up and running WP with a secondary on standby. I leverage the scripts in this folder to backup the primary server, download the backups locally for long-term storage, and upload them to a secondary server in AWS. This makes it trivial to re-create our website from a specific backup date. Leveraging DNS makes it possible to re-target the secondary server while the primary is brought down for maintenance. This enables me to test the new WP upgrades and only correct DNS when testing on the primary is concluded. It also means I have a secondary server on standby to cut over to in the case of problems on the primary.
 
-I can then leverage DNS to point to the secondary server while I bring the primary down for maintenance (WP Updates, plugin updates, etc..). This enables me to test the new WP upgrades and only direct visiters there when testing is concluded. It also means I have a secondary server on standby to cut over to in the case of problems on the primary.
-
-### !! Certificate/Hostnames are hardcoded - make sure you read the scripts before running them
+#### Certificate Names/Hostnames are hardcoded - make sure you read the scripts before running them
 
 | Filename        | Description                                                                          |
 |-----------------|--------------------------------------------------------------------------------------|
