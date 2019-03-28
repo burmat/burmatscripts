@@ -7,4 +7,5 @@
 | [ipv6_decimal_to_hex.py](https://github.com/burmat/burmatscripts/blob/master/python/ipv6_decimal_to_hex.py) | IPv6 Decimal -> Hex Convert  |
 | [sftpupload.py](https://github.com/burmat/burmatscripts/blob/master/python/sftpupload.py) | SFTP Class file for automated transmissions |
 | [transfer.py](https://github.com/burmat/burmatscripts/blob/master/python/transfer.py)  | SFTP Template Script to use with [sftpupload.py](https://github.com/burmat/burmatscripts/blob/master/python/sftpupload.py) |
+| [webshell.py](https://github.com/burmat/burmatscripts/blob/master/python/webshell.py) | a basic pseudo-shell using an RCE flaw to simulate a shell |
 |   |   |
