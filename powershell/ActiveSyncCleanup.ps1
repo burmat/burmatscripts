@@ -1,5 +1,5 @@
 #
-# Program: ActiveSynceCleanup.ps1
+# Program: ActiveSyncCleanup.ps1
 # By: burmat 03/2019
 # Purpose: Remove old/stale ActiveSync devices, inventory live ones
 #
