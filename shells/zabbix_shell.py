@@ -55,6 +55,17 @@ def logout(req):
         print "[!] unable to log out of session: "
         print res
 
+def dump_hosts(req):
+    res = send_request(req)
+    if res.has_key("result"):
+        print "[>] available host ids to leverage:"
+        for host in res["result"]:
+            print "HOST ID: " + host["hostid"] + " - HOST: " + host["host"] + " " + host["interfaces"][0]["ip"]
+        ## all hosts are listed in the output for the user to choose
+    else:
+        print "[!] unable to dump hosts"
+        return False
+
 def get_script(session):
 
     create_params = { 
@@ -109,6 +120,10 @@ session = login(build_request("user.login", {"user":username,"password":password
 ## create / lookup the script by name. return it's ID
 scriptid = get_script(session)
 print "[>] script id found [" + scriptid + "]"
+
+## list the hosts avaible for use:
+dump_hosts(build_request("host.get", 
+    {"output":["hostid","host"],"selectInterfaces":["interfaceid","ip"]}, session))
 
 ## CMD prompt - update the script and execute the commands
 while True:
