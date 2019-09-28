@@ -4,6 +4,7 @@
 |-----------------|--------------------------------------------------------------------------------------|
 | [ActiveSyncCleanup.ps1](https://github.com/burmat/burmatscripts/blob/master/powershell/ActiveSyncCleanup.ps1) | Remove stale and orphaned ActiveSync devices, inventory live ones |
 | [Code-Backup.ps1](https://github.com/burmat/burmatscripts/blob/master/powershell/Code-Backup.ps1) | (Dirty) Script to backup code directories to network share |
+| [Disable-SMBv1-NetBIOS.ps1](https://github.com/burmat/burmatscripts/blob/master/powershell/Disable-SMBv1-NetBIOS.ps1) | Simple startup script for disabling NetBIOS and SMBv1 | 
 | [ftp_upload.ps1](https://github.com/burmat/burmatscripts/blob/master/powershell/ftp_upload.ps1) | FTP File Uploader with Email Notification |
 | [Get-ADHostsLastLogon.ps1](https://github.com/burmat/burmatscripts/blob/master/powershell/Get-ADHostsLastLogon.ps1) | Get a last logon datetime for every computer in AD |
 | [Get-ADStaleHosts.ps1](https://github.com/burmat/burmatscripts/blob/master/powershell/Get-ADStaleHosts.ps1) | Get all computers that have not been logged into for the last 30 days |
