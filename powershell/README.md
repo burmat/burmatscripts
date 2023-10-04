@@ -3,6 +3,7 @@
 | Filename        | Description                                                                          |
 |-----------------|--------------------------------------------------------------------------------------|
 | [ActiveSyncCleanup.ps1](https://github.com/burmat/burmatscripts/blob/master/powershell/ActiveSyncCleanup.ps1) | Remove stale and orphaned ActiveSync devices, inventory live ones |
+| [AES-Locker.ps1](https://github.com/burmat/burmatscripts/blob/master/powershell/AES-Locker.ps1) | A rudimentary ransomware simulator that is useless for extortion |
 | [ClipboardSniffer.ps1](https://github.com/burmat/burmatscripts/blob/master/powershell/ClipboardSniffer.ps1) | A simple clipboard sniffing implementation |
 | [Code-Backup.ps1](https://github.com/burmat/burmatscripts/blob/master/powershell/Code-Backup.ps1) | (Dirty) Script to backup code directories to network share |
 | [Disable-SMBv1-NetBIOS.ps1](https://github.com/burmat/burmatscripts/blob/master/powershell/Disable-SMBv1-NetBIOS.ps1) | Simple startup script for disabling NetBIOS and SMBv1 | 
