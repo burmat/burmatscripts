@@ -5,6 +5,7 @@
 |-----------------|--------------------------------------------------------------------------------------|
 | [cleanup.sh](https://github.com/burmat/burmatscripts/blob/master/bash/cleanup.sh) | A simple utility script to remove files in a directory by file ext (cron) |
 | [cover_tracks.sh](https://github.com/burmat/burmatscripts/blob/master/bash/cover_tracks.sh) | Clear out common/various files that might lead to discovery |
+| [delete-aws-sec-groups.sh](https://github.com/burmat/burmatscripts/blob/master/bash/delete-aws-sec-groups.sh) |Delete orphaned security groups associated to an AWS tenant |
 | [delete_by_extension.sh](https://github.com/burmat/burmatscripts/blob/master/bash/delete_by_extension.sh) | Given a directory, remove all files with whitelist on file extensions |
 | [hosts_to_ips.sh](https://github.com/burmat/burmatscripts/blob/master/bash/hosts_to_ips.sh) | Given a list of hostnames, run the 'host' command to get the IP address |
 | [iptables_flush.sh](https://github.com/burmat/burmatscripts/blob/master/bash/iptables_flush.sh) | Flush all rules out of iptables (Allow all traffic) |
