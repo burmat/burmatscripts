@@ -12,6 +12,7 @@
 | [procmon.sh](https://github.com/burmat/burmatscripts/blob/master/bash/procmon.sh) | From ippsec to find blind cron jobs/processes using PS |
 | [purge_logs.sh](https://github.com/burmat/burmatscripts/blob/master/bash/purge_logs.sh) | Empty out common log files |
 | [snmp_walker.sh](https://github.com/burmat/burmatscripts/blob/master/bash/snmp_walker.sh) | Loops a list of targets for snmpwalk on interesting OIDs |
+| [static-ip.sh](https://github.com/burmat/burmatscripts/blob/master/bash/static-ip.sh) | A script to set a static IP based on user input |
 | [subnet_to_cidr.sh](https://github.com/burmat/burmatscripts/blob/master/bash/subnet_to_cidr.sh) | Given a list of IP subnets/scopes, generate a list of individual IP addresses in CIDR format |
 | [tailscale.sh](https://github.com/burmat/burmatscripts/blob/master/bash/tailscale.sh) | Install Tailscale |
 | [vuln_pkg_lookup.sh](https://github.com/burmat/burmatscripts/blob/master/bash/vuln_pkg_lookup.sh) | Generate a list of packages on target system. Batch search them against searchsploit |
