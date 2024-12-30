@@ -2,6 +2,7 @@
 
 | Filename        | Description                                                                          |
 |-----------------|--------------------------------------------------------------------------------------|
+| [bhceq.py](https://github.com/burmat/burmatscripts/blob/master/python/bhceq) | Import (and clear) `customqueries.json` files for BloodHound CE | 
 | [compare_files.py](https://github.com/burmat/burmatscripts/blob/master/python/compare_files.py) | Simple file comparison script that will delete dupes | 
 | [edi_transfer.py](https://github.com/burmat/burmatscripts/blob/master/python/edi_transfer.py) | EDI File Transmission Script (SFTP) |
 | [hosts_to_ips.py](https://github.com/burmat/burmatscripts/blob/master/python/hosts_to_ips.py) | Convert domains/subdomains to IP addresses |
