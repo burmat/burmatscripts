@@ -7,7 +7,7 @@
 | [cover_tracks.sh](https://github.com/burmat/burmatscripts/blob/master/bash/cover_tracks.sh) | Clear out common/various files that might lead to discovery |
 | [delete-aws-sec-groups.sh](https://github.com/burmat/burmatscripts/blob/master/bash/delete-aws-sec-groups.sh) |Delete orphaned security groups associated to an AWS tenant |
 | [delete_by_extension.sh](https://github.com/burmat/burmatscripts/blob/master/bash/delete_by_extension.sh) | Given a directory, remove all files with whitelist on file extensions |
-| [dev_init.sh](https://github.com/burmat/burmatscripts/blob/master/bash/dev_init.sh) | Setup for C compiilation |
+| [dev_init.sh](https://github.com/burmat/burmatscripts/blob/master/bash/dev_init.sh) | Setup for C compilation |
 | [hosts_to_ips.sh](https://github.com/burmat/burmatscripts/blob/master/bash/hosts_to_ips.sh) | Given a list of hostnames, run the 'host' command to get the IP address |
 | [iptables_flush.sh](https://github.com/burmat/burmatscripts/blob/master/bash/iptables_flush.sh) | Flush all rules out of iptables (Allow all traffic) |
 | [procmon.sh](https://github.com/burmat/burmatscripts/blob/master/bash/procmon.sh) | From ippsec to find blind cron jobs/processes using PS |
